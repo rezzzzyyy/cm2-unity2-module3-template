@@ -5,7 +5,7 @@ using TMPro;
 
 public class FireProjectile : MonoBehaviour
 {
-    public GameObject bulletPrefab;
+     public GameObject bulletPrefab;
     public float bulletActiveTime = 3;
     public float bulletPower = 10;
 
@@ -25,14 +25,20 @@ public class FireProjectile : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetButtonDown("Fire1") && ammoCount > 0)
+        if (Input.GetButtonDown("Fire1") && ammoCount > 0)
         {
-            // LESSON 3-3: Add code below.
+            GameObject bullet = Instantiate(bulletPrefab);
+            Destroy(bullet, bulletActiveTime);
 
+            FireBullet(bullet.GetComponent<BulletScript>());
+            ammoCount -= 1;
             ammoText.text = $"Ammo: {ammoCount}";
         }
 
-        // LESSON 3-4: Add code below.
+        if (ammoCount == 0)
+        {
+            StartCoroutine(Reloading());
+        }
     }
 
     private void FireBullet(BulletScript bullet)
@@ -43,10 +49,14 @@ public class FireProjectile : MonoBehaviour
 
     public IEnumerator Reloading()
     {
-        // LESSON 3-4: Add code below.
+        ammoText.text =  "Reloading...";
 
-        yield return new WaitForSeconds(0);
-        
+        yield return new WaitForSeconds(0.5f);
+        ammoCount = maxAmmo;
+        ammoText.text = $"Ammo: {ammoCount}";
+
+       
+
         // LESSON 3-4: Add code below.
     }
 }

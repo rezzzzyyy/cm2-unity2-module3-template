@@ -14,18 +14,28 @@ public class ZombieSpawnerScript : MonoBehaviour
 
     void Start()
     {
-        // LESSON 3-4: Replace code below.
-        SpawnZombie();
+        StartCoroutine(ZombieSpawnRepeater());
     }
 
+    public IEnumerator ZombieSpawnRepeater()
+    {
+        yield return new WaitForSeconds(2f);
+        SpawnZombie();
+        
+        StartCoroutine(ZombieSpawnRepeater());
+        
+    }
+    
     public Vector3 RandomPosition()
     {
-        return new Vector3(Random.Range(-spawnRange,spawnRange), 1, Random.Range(-spawnRange,spawnRange));
+        return new Vector3(Random.Range(-spawnRange, spawnRange), 1, Random.Range(-spawnRange, spawnRange));
     }
 
     public void SpawnZombie()
     {
-        // LESSON 3-3: Add code below.
+        GameObject zombie = Instantiate(zombiePrefab);
+        target.position = RandomPosition();
+        zombie.GetComponent<ZombieScript>().Init(target, this);
     }
 
     public void ZombieHasDied()
